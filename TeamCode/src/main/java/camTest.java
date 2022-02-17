@@ -16,7 +16,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 //We initialize the program as an autonomous file
 @Autonomous (name="cameraTesting")
 public class camTest extends LinearOpMode{
-    //Creating a camera object
+    //Creating a camera object (internal camera)
     OpenCvCamera phoneCam;
     //Create a basic rectangle with the specified points
     public static final Rect leftROI = new Rect(
