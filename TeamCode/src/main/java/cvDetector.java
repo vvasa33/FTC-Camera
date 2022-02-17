@@ -29,6 +29,14 @@ public class cvDetector extends OpenCvPipeline {
     //duck
     static final double threshold = 0.45;
 
+
+    boolean elementLeft, elementRight;
+    public position location;
+    public enum position {
+        LEFT,
+        RIGHT,
+        NOT_DETECTED
+    }
     /*
     Our main constructor. It takes in the telemetry and the two rectangles that we want
     displayed on the screen.
@@ -37,6 +45,10 @@ public class cvDetector extends OpenCvPipeline {
         telemetry = t;
         leftROI = left;
         rightROI = right;
+    }
+
+    public cvDetector() {
+
     }
     /*
     This one's a little tricky.
@@ -83,8 +95,8 @@ public class cvDetector extends OpenCvPipeline {
         We create these boolean values to see whether a duck is at least 45% visible in the frame.
         You can change the value of threshold to your liking
          */
-        boolean elementLeft = leftValue > threshold;
-        boolean elementRight = rightValue > threshold;
+        elementLeft = leftValue > threshold;
+        elementRight = rightValue > threshold;
 
         /*
         We display whether the duck is in the left rectangle, right rectangle, or none of the
@@ -122,4 +134,14 @@ public class cvDetector extends OpenCvPipeline {
         //Return the matrix back to the original program so that it can do some calculations!
         return mat;
     }
+
+//    public position getLocation() {
+//        if (elementLeft) {
+//            return position.LEFT;
+//        } else if (elementRight) {
+//            return position.RIGHT;
+//        } else {
+//            return position.NOT_DETECTED;
+//        }
+//    }
 }

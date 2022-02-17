@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -13,10 +14,13 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.cvDetector;
+
 //We initialize the program as an autonomous file
 @Autonomous (name="cameraTesting")
 public class camTest extends LinearOpMode{
     //Creating a camera object (internal camera)
+    Telemetry telemetry;
     OpenCvCamera phoneCam;
     //Create a basic rectangle with the specified points
     public static final Rect leftROI = new Rect(
@@ -48,9 +52,10 @@ public class camTest extends LinearOpMode{
         to the telemetry and also add the rectangles to the view so that the user can see
         what's actually being seen by the robot.
          */
-        phoneCam.setPipeline(new org.firstinspires.ftc.robotcontroller.external.samples.cvDetector(
-                telemetry,leftROI,rightROI
-        ));
+
+        cvDetector detector = new cvDetector(telemetry, leftROI, rightROI);
+
+        phoneCam.setPipeline(detector);
 
         /*
         This code basically starts streaming whatever is being seen by the phone cam. If you
@@ -71,9 +76,22 @@ public class camTest extends LinearOpMode{
         //***IMPORTANT: Give the phone some time to initialize the camera before actually pressing play.
         waitForStart();
 
+        cvDetector.position location = detector.location;
 
 
-        //stops the stream from occuring because it takes up a lot of space
+        if (location == cvDetector.position.LEFT) {
+            telemetry.addData("Location: ", "Left");
+        } else if (location == cvDetector.position.RIGHT) {
+            telemetry.addData("Location: ", "Right");
+        } else if (location == cvDetector.position.NOT_DETECTED){
+            telemetry.addData("Location: ","Not in Field of View");
+        } else {
+            telemetry.addData("I am broken ","please help");
+        }
+
+        telemetry.update();
+        sleep(5000);
+        //stops the stream from sending us data because it takes up a lot of space
         phoneCam.stopStreaming();
     }
 }
